@@ -1,4 +1,5 @@
 import run from "aocrunner";
+import { sum } from "../utils/index.js"
 
 type roundNotation = [
   'A'|'B'|'C',
@@ -22,7 +23,6 @@ const drawScenarios = [
   'B Y',
   'C Z'
 ];
-const sum = (acc: number, curr: number) => acc + curr;
 
 
 const part1 = (rawInput: string) => {

@@ -1,6 +1,6 @@
 import run from "aocrunner";
+import { sum } from "../utils/index.js"
 
-const sum = (acc: number, current = 0) => acc + current;
 
 const parseInventory = (inventory: string, firstSep = '\n\n', secondSep = '\n') =>
     inventory
