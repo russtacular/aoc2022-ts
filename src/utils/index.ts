@@ -1,6 +1,14 @@
 
 export const sum = (acc: number, curr: number) => acc + curr;
 
+export function intersect<T>(base: Set<T>, ...rest:Set<T>[]) {
+    return new Set([...base].filter((x) => rest.reduce((acc, curr) => acc && curr.has(x), true)));
+};
+
+export function chunkArray<T>(arr: T[], chunkSize: number) {
+    return [...Array(Math.ceil(arr.length/chunkSize))].map((_, i) => arr.slice(i * chunkSize, i * chunkSize + chunkSize));
+}
+
 /**
  * Root for your util libraries.
  *

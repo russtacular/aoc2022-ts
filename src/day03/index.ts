@@ -1,5 +1,5 @@
 import run from "aocrunner";
-import { sum } from "../utils/index.js";
+import { sum, chunkArray } from "../utils/index.js";
 
 const parseInput = (rawInput: string) => rawInput;
 
@@ -33,7 +33,7 @@ const part2 = (rawInput: string) => {
   const input = parseInput(rawInput);
 
   const elves = input.split('\n').map(e => new Set(e));
-  const groupings = [...Array(Math.ceil(elves.length/3))].map((_, i) => elves.slice(i * 3, i * 3+3));
+  const groupings = chunkArray(elves, 3);
 
   return groupings.map((g, i) => {
     if(g.length != 3) throw Error("Odd elf out at index " + i);
