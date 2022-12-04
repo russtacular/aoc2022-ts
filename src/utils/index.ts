@@ -1,6 +1,10 @@
 
 export const sum = (acc: number, curr: number) => acc + curr;
 
+export function eqSet<T>(base: Set<T>, ...rest: Set<T>[]) {
+    return rest.reduce((acc, curr) => acc && base.size === curr.size && [...base].every(x => curr.has(x)), true);
+}
+
 export function intersect<T>(base: Set<T>, ...rest:Set<T>[]) {
     return new Set([...base].filter((x) => rest.reduce((acc, curr) => acc && curr.has(x), true)));
 };
@@ -8,6 +12,10 @@ export function intersect<T>(base: Set<T>, ...rest:Set<T>[]) {
 export function chunkArray<T>(arr: T[], chunkSize: number) {
     return [...Array(Math.ceil(arr.length/chunkSize))].map((_, i) => arr.slice(i * chunkSize, i * chunkSize + chunkSize));
 }
+
+export const range = (start: number, stop: number, step: number = 1) =>
+  Array.from({ length: (stop - start) / step + 1 }, (_, i) => start + i * step);
+
 
 /**
  * Root for your util libraries.
