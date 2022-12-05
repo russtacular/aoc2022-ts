@@ -13,6 +13,10 @@ export function chunkArray<T>(arr: T[], chunkSize: number) {
     return [...Array(Math.ceil(arr.length/chunkSize))].map((_, i) => arr.slice(i * chunkSize, i * chunkSize + chunkSize));
 }
 
+export function transposeArray<T>(arr: T[][]) {
+    return arr[0].map((_, colIndex) => arr.map(row => row[colIndex]));
+}
+
 export const range = (start: number, stop: number, step: number = 1) =>
   Array.from({ length: (stop - start) / step + 1 }, (_, i) => start + i * step);
 
