@@ -16,6 +16,18 @@ export function chunkArray<T>(arr: T[], chunkSize: number) {
 export const range = (start: number, stop: number, step: number = 1) =>
   Array.from({ length: (stop - start) / step + 1 }, (_, i) => start + i * step);
 
+export type Vector1d = [number, number];
+
+export const vContains = (a: Vector1d, b: Vector1d) =>
+    a.length === b.length && a[0] <= b[0] && a[1] >= b[1];
+
+export const vIntersects = (a: Vector1d, b: Vector1d) =>
+    a.length === b.length &&
+        (
+            a[0] <= b[0] && a[1] >= b[0]
+            ||
+            a[0] >= b[0] && a[0] <= b[1]
+        )
 
 /**
  * Root for your util libraries.

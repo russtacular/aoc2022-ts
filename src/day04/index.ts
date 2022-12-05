@@ -1,25 +1,22 @@
 import run from "aocrunner";
-import { sum, eqSet, intersect, range } from "../utils/index.js";
+import { sum, Vector1d, vContains, vIntersects } from "../utils/index.js";
+
 
 const parseInput = (rawInput: string) => rawInput;
 
-const pairInput = (input: string) => {
-  return input.split('\n').map(l => l.split(',', 2).map(e => {
-    const rangePair = e.split('-', 2).map(n => parseInt(n, 10)) as [number, number];
-    // if(rangePair.length > 2) throw Error("Invalid Range: " + rangePair.toString());
-    return new Set(range(rangePair[0], rangePair[1]));
-  }));
-}
+const pairInput = (input: string) =>
+  input.split('\n')
+    .map(l => l.split(',', 2)
+    .map(e => e.split('-', 2)
+    .map(n => parseInt(n, 10)) as Vector1d));
+
 
 const part1 = (rawInput: string) => {
   const input = parseInput(rawInput);
 
   const pairedInput = pairInput(input);
 
-  return pairedInput.map(l => {
-    const inter = intersect(l[0], l[1]);
-    return +(eqSet(inter, l[0]) || eqSet(inter, l[1]));
-  }).reduce(sum, 0);
+  return pairedInput.map(l => +(vContains(l[0], l[1]) || vContains(l[1], l[0]))).reduce(sum, 0);
 };
 
 const part2 = (rawInput: string) => {
@@ -27,7 +24,7 @@ const part2 = (rawInput: string) => {
 
   const pairedInput = pairInput(input);
 
-  return pairedInput.map(l => +(intersect(l[0], l[1]).size > 0)).reduce(sum, 0);
+  return pairedInput.map(l => +(vIntersects(l[0], l[1]))).reduce(sum, 0);
 };
 
 run({
