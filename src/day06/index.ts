@@ -1,34 +1,41 @@
 import run from "aocrunner";
 import { arrayBuffer } from "stream/consumers";
 
-const part1 = (rawInput: string) => rawInput.split('')
-  .findIndex((v, i, arr) =>
-    i >=4 && new Set([v, arr[i-1], arr[i-2], arr[i-3]]).size == 4
-  ) + 1
+const simpleSearch = (str: string, delimeterSize: number) => {
+  return str.split('')
+    .findIndex((v, i, arr) =>
+      i >= delimeterSize && new Set(arr.slice(i-delimeterSize, i)).size == delimeterSize
+    )
+}
 
+const fastSearch = (str: string, delimeterSize: number) => {
+  const input = str.split('');
+  let i = delimeterSize;
   
+  while(i < input.length) {
+    const slice = input.slice(i - delimeterSize, i);
+    const dupIdx = findDuplicateIndexRight(slice);
+    if(dupIdx === -1) break;
+    
+    i += dupIdx + 1;
+  }
+  return i;
+}
+
 const findDuplicateIndexRight = (arr: string[]) => {
   let idx = -1;
-  for(let i = arr.length-1; i >= 0; i--) {
-    idx = arr.slice(0, i-1).findLastIndex(v => v === arr[i]);
+
+  for(let i = arr.length-1; i > 0; i--) {
+    idx = arr.slice(0, i).findLastIndex(v => v === arr[i]);
+    
     if(idx != -1) break;
   }
   return idx;
 }
 
-const part2 = (rawInput: string) => {
-  const delimeterSize = 14;
-  const input = rawInput.split('');
+const part1 = (rawInput: string) => simpleSearch(rawInput, 4);
 
-  let i = delimeterSize;
-  while(i < input.length) {
-    const slice = input.slice(i - delimeterSize, i);
-    if( new Set(slice).size === delimeterSize ) break;
-
-    i += findDuplicateIndexRight(slice) + 1;
-  }
-  return i;
-};
+const part2 = (rawInput: string) => fastSearch(rawInput, 14);
 
 run({
   part1: {
@@ -43,7 +50,7 @@ run({
   part2: {
     tests: [
       {
-        input: `bvwbjplbgvbhsrlpgdmjqwftvncz`,
+        input: `nppdvjthqldpwncqszvftbrmjlhg`,
         expected: 23,
       },
     ],
