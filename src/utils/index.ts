@@ -1,6 +1,8 @@
 
 export const sum = (acc: number, curr: number) => acc + curr;
 
+export const max = (acc: number, curr: number) => acc > curr ? acc : curr;
+
 export function eqSet<T>(base: Set<T>, ...rest: Set<T>[]) {
     return rest.reduce((acc, curr) => acc && base.size === curr.size && [...base].every(x => curr.has(x)), true);
 }
