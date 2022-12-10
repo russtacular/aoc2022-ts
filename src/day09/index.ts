@@ -11,52 +11,6 @@ const parseInput = (rawInput: string) => {
 };
 
 class Rope {
-  private head: Point = [0,0];
-  tail: Point = [0,0];
-
-  headHist: Point[] = [[0,0]];
-  tailHist: Point[] = [[0,0]];
-
-  move(v: Vector) {  
-    const relMag = v.dir == 'D' || v.dir == 'L' ? -1 : 1;
-    if(v.dir == 'U' || v.dir == 'D') {
-      for(let yy = v.mag; yy > 0; yy--) {
-        this.head = [this.head[0], this.head[1] + relMag * 1];
-        this.headHist.push(this.head);
-        this.moveTail();
-      }
-    } else {
-      for(let xx = v.mag; xx > 0; xx--) {
-        this.head = [this.head[0] + relMag * 1, this.head[1]];
-        this.headHist.push(this.head);
-        this.moveTail();
-      }
-    }
-  }
-
-  moveTail() {
-    if(!this.isAdjacent()) {
-      this.tail = this.headHist[this.headHist.length-2];
-      this.tailHist.push(this.tail);
-    }
-  }
-
-  isAdjacent() {
-    return Math.abs(this.head[0] - this.tail[0]) <= 1 && Math.abs(this.head[1] - this.tail[1]) <= 1;
-  }
-}
-
-
-const part1 = (rawInput: string) => {
-  const input = parseInput(rawInput);
-  const rope = new Rope();
-
-  input.forEach(v => rope.move(v));
-  return new Set(rope.tailHist.map(p => p.join())).size;
-};
-
-
-class Rope2 {
   knots: Point[];
   tailHist: Point[] = [[0,0]];
 
@@ -94,8 +48,8 @@ class Rope2 {
       }
     }
 
-    const [tailX, tailY] = this.knots[this.knots.length - 1];
-    this.tailHist.unshift([tailX, tailY]);
+    const tLoc = this.knots[this.knots.length - 1];
+    this.tailHist.unshift(tLoc);
   }
 
   isAdjacent(back: Point, front: Point) {
@@ -103,9 +57,18 @@ class Rope2 {
   }
 }
 
+
+const part1 = (rawInput: string) => {
+  const input = parseInput(rawInput);
+  const rope = new Rope(2);
+
+  input.forEach(v => rope.move(v));
+  return new Set(rope.tailHist.map(p => p.join(','))).size;
+};
+
 const part2 = (rawInput: string) => {
   const input = parseInput(rawInput);
-  const rope = new Rope2(10);
+  const rope = new Rope(10);
 
   input.forEach(v => rope.move(v));
   return new Set(rope.tailHist.map(p => p.join(','))).size;
