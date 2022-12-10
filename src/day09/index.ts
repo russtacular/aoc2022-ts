@@ -4,11 +4,10 @@ import { sum } from "../utils/index.js";
 type Point = [number, number];
 type Vector = { dir: string, mag: number };
 
-const parseInput = (rawInput: string) => {
-  return rawInput.split('\n').map(r => r.split(' ')).map(r=> {
+const parseInput = (rawInput: string) =>
+  rawInput.split('\n').map(r => r.split(' ')).map(r=> {
     return {dir: r[0], mag: parseInt(r[1], 10)};
   });
-};
 
 class Rope {
   knots: Point[];
@@ -19,8 +18,8 @@ class Rope {
   }
 
   move(v: Vector) {  
-    const relMag = v.dir == 'D' || v.dir == 'L' ? -1 : 1;
-    if(v.dir == 'U' || v.dir == 'D') {
+    const relMag = v.dir === 'D' || v.dir === 'L' ? -1 : 1;
+    if(v.dir === 'U' || v.dir === 'D') {
       for(let yy = v.mag; yy > 0; yy--) {
         this.knots[0] = [this.knots[0][0], this.knots[0][1] + relMag * 1];
         this.moveTail();
@@ -38,18 +37,19 @@ class Rope {
       if(!this.isAdjacent(this.knots[i], this.knots[i - 1])) {
         const dx = this.knots[i-1][0]-this.knots[i][0];
         const dy = this.knots[i-1][1]-this.knots[i][1];
-
-        this.knots[i] = [
-          this.knots[i][0] + (Math.abs(dx) == 2 ? dx/2 : dx),
-          this.knots[i][1] + (Math.abs(dy) == 2 ? dy/2 : dy)
+        const newPt: Point = [
+          this.knots[i][0] + (Math.abs(dx) === 2 ? dx/2 : dx),
+          this.knots[i][1] + (Math.abs(dy) === 2 ? dy/2 : dy)
         ];
+
+        this.knots[i] = newPt;
+        if(i === this.knots.length-1) {
+          this.tailHist.unshift(newPt);
+        }
       } else {
         break;
       }
     }
-
-    const tLoc = this.knots[this.knots.length - 1];
-    this.tailHist.unshift(tLoc);
   }
 
   isAdjacent(back: Point, front: Point) {
